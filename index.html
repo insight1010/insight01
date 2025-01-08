@@ -471,29 +471,93 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: var(--bottom-nav-height);
-      background-color: var(--card-bg);
+      height: 64px;
+      background: rgba(28, 28, 28, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-top: 1px solid var(--border-color);
-      z-index: 100;
-      padding: 8px 0;
+      z-index: 1000;
     }
 
-    .nav-link {
+    .bottom-nav-content {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Меняем на center */
+      gap: 48px; /* Фиксированный отступ между группами */
+      margin: 0 auto;
+      padding: 0 16px;
+      max-width: 320px; /* Уменьшаем максимальную ширину */
+    }
+
+    .nav-group {
+      display: flex;
+      gap: 32px; /* Увеличиваем отступ между иконками внутри группы */
+    }
+
+    .nav-item {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
       color: var(--text-secondary);
       text-decoration: none;
-      font-size: 12px;
+      transition: all 0.3s ease;
+      padding: 8px;
+      min-width: 32px; /* Фиксированная ширина для выравнивания */
     }
 
-    .nav-link i {
-      font-size: 24px;
+    .nav-item i {
+      font-size: 22px; /* Уменьшаем размер иконок */
+      transition: transform 0.3s ease, color 0.3s ease;
     }
 
-    .nav-link.active {
+    .nav-item.active {
       color: var(--primary);
+    }
+
+    .nav-item.active i {
+      transform: translateY(-4px);
+    }
+
+    .nav-item:hover i {
+      transform: translateY(-2px);
+    }
+
+    /* Обновляем стили центральной кнопки */
+    .add-button {
+      position: relative; /* Меняем с absolute на relative */
+      width: 48px;
+      height: 48px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(14, 140, 109, 0.3);
+      transition: all 0.3s ease;
+      transform: translateY(-8px); /* Поднимаем кнопку немного вверх */
+    }
+
+    /* Удаляем старые отступы */
+    .nav-group:first-child,
+    .nav-group:last-child {
+      margin: 0;
+    }
+
+    /* Анимация для иконок */
+    @keyframes iconPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .nav-item:active i {
+      animation: iconPop 0.3s ease;
     }
 
     /* Профиль */
@@ -810,6 +874,139 @@
     .notification-message {
       display: none;
     }
+
+    /* Категории */
+    .category-hr {
+      background: rgba(255, 99, 132, 0.1);
+      color: #ff6384;
+    }
+
+    .category-marketing {
+      background: rgba(75, 192, 192, 0.1);
+      color: #4bc0c0;
+    }
+
+    .category-management {
+      background: rgba(255, 159, 64, 0.1);
+      color: #ff9f40;
+    }
+
+    .category-operational {
+      background: rgba(54, 162, 235, 0.1);
+      color: #36a2eb;
+    }
+
+    .category-strategy {
+      background: rgba(153, 102, 255, 0.1);
+      color: #9966ff;
+    }
+
+    /* Этапы кейса */
+    .case-stage {
+      padding: 12px;
+      background: var(--bg-color);
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .case-stage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .case-stage-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+
+    .case-stage-content {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .case-stage.completed {
+      background: rgba(16, 163, 127, 0.1);
+    }
+
+    .case-stage.completed .case-stage-title {
+      color: var(--primary);
+    }
+
+    /* Инсайты */
+    .insight-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .insight-item {
+      padding: 8px;
+      background: var(--bg-color);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .insight-author {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .insight-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 12px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    /* Добавляем стили для индикатора уведомлений */
+    .nav-item .notification-indicator {
+      position: absolute;
+      top: 4px;
+      right: 0;
+      width: 18px;
+      height: 18px;
+      background-color: #ff3b30;
+      border-radius: 9px;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--card-bg);
+      transform: scale(0);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .nav-item .notification-indicator.active {
+      transform: scale(1);
+    }
+
+    .nav-item .notification-indicator.pulse {
+      animation: notificationPulse 2s infinite;
+    }
+
+    @keyframes notificationPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 6px rgba(255, 59, 48, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 59, 48, 0);
+      }
+    }
   </style>
 </head>
 <body>
@@ -825,8 +1022,8 @@
   <!-- Навигация -->
   <div class="tg-header">
     <div class="container d-flex justify-content-between align-items-center py-2">
-      <span class="header-title">ТРИЗ</span>
-      <button class="btn-icon" onclick="showProfile()">
+      <span class="header-title">ПРИЗ</span>
+      <button type="button" class="btn-icon" onclick="showProfile()">
         <i class="bi bi-person-circle"></i>
       </button>
     </div>
@@ -842,7 +1039,6 @@
         <div class="chip">Менеджмент</div>
         <div class="chip">Операционка</div>
         <div class="chip">Стратегия</div>
-        <div class="chip">Рыночный</div>
       </div>
     </div>
   </div>
@@ -850,108 +1046,80 @@
   <!-- Контейнер для карточек -->
   <div class="container main-content">
     <div class="insight-feed">
-      <!-- Шаблон карточки кейса -->
-      <div class="insight-card" data-case-id="new_case">
+      <!-- HR кейс -->
+      <div class="insight-card" data-category="hr">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-start mb-3">
             <div>
-              <span class="category-badge category-operational mb-2">Мой кейс</span>
-              <h5 class="card-title mb-1">Потери при передаче смен</h5>
+              <span class="category-badge category-hr mb-2">HR</span>
+              <h5 class="card-title mb-1">Автосервис без сервиса — трансформация в выездную бригаду</h5>
               <div class="insight-stats">
                 <span class="insight-stat">
                   <i class="bi bi-people-fill"></i>
-                  1 участник
+                  12 участников
                 </span>
                 <span class="insight-stat">
                   <i class="bi bi-clock"></i>
-                  Только что
+                  2 часа назад
                 </span>
-              </div>
-            </div>
-            <div class="d-flex flex-column align-items-end">
-              <span class="status-badge mb-2">Новый</span>
-              <div class="progress-mini">
-                <div class="progress-step active">
-                  <i class="bi bi-1-circle-fill"></i>
-                </div>
-                <div class="progress-line"></div>
-                <div class="progress-step">
-                  <i class="bi bi-2-circle"></i>
-                </div>
-                <div class="progress-line"></div>
-                <div class="progress-step">
-                  <i class="bi bi-3-circle"></i>
-                </div>
               </div>
             </div>
           </div>
 
           <div class="insight-detail mb-3">
             <div class="mb-3">
-              <small class="text-muted d-block mb-1">X-элемент</small>
-              <p class="mb-2">30% задач теряется при передаче между сменами</p>
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">У компании сгорел один из сервисных центров, а специалистов девать некуда. Увольнять жалко, в других сервисах нет вакансий.</p>
               <div class="d-flex gap-2">
                 <span class="metric-badge">
                   <i class="bi bi-exclamation-triangle"></i>
-                  30% потерь
+                  Риск потери специалистов
                 </span>
                 <span class="metric-badge">
-                  <i class="bi bi-people"></i>
-                  3 смены
+                  <i class="bi bi-building"></i>
+                  Нет помещения
                 </span>
               </div>
             </div>
 
-            <div class="stages-progress">
-              <!-- Этап 1: Конфликтующая пара -->
-              <div class="stage active">
-                <div class="stage-header">
-                  <div>
-                    <h6 class="mb-1">Конфликтующая пара</h6>
-                    <small class="text-muted">
-                      <i class="bi bi-pencil"></i>
-                      Заполните конфликтующую пару
-                    </small>
-                  </div>
-                </div>
-                <div class="stage-content show">
-                  <div class="mb-3">
-                    <div class="alert alert-info">
-                      <i class="bi bi-info-circle me-2"></i>
-                      Опишите противоречие в проблеме
-                    </div>
-                  </div>
-                  <div class="conflict-pair">
-                    <div class="conflict-element">
-                      <span class="element-label">Что должно быть?</span>
-                      <input type="text" class="form-control form-control-sm" placeholder="Итог мозгового штурма">
-                    </div>
-                    <div class="conflict-vs">VS</div>
-                    <div class="conflict-element">
-                      <span class="element-label">Чему это мешает?</span>
-                      <input type="text" class="form-control form-control-sm" placeholder="Итог мозгового штурма">
-                    </div>
-                  </div>
-                  <div class="mt-3 d-flex justify-content-end">
-                    <button class="btn btn-sm btn-primary" onclick="saveConflictPair('new_case')">
-                      <i class="bi bi-check-lg"></i>
-                      Сохранить результаты
-                    </button>
-                  </div>
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
                 </div>
               </div>
-
-              <!-- Этап 2: ИКР -->
-              <div class="stage">
-                <div class="stage-header">
-                  <div>
-                    <h6 class="mb-1">Идеальный конечный результат</h6>
-                    <small class="text-muted">
-                      <i class="bi bi-lock"></i>
-                      Этап заблокирован
-                    </small>
-                  </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Желание сохранить ценных специалистов</div>
+                  <div class="mx-3">VS</div>
+                  <div>Нет физического пространства для их размещения</div>
                 </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Специалисты продолжают работать, приносят компании доход, но при этом не нужно держать их в новом помещении
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Организовать мобильный выездной сервис. Сотрудники выезжают к клиентам на дом/в офис, повышая лояльность и охват клиентов.
               </div>
             </div>
           </div>
@@ -965,13 +1133,2123 @@
                 <i class="bi bi-share"></i>
               </button>
             </div>
-            <div class="d-flex gap-2">
-              <span class="metric-badge">
-                <i class="bi bi-clock"></i>
-                23:59:59
-              </span>
-              <button class="btn btn-sm btn-primary">Обсудить</button>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Маркетинг кейс -->
+      <div class="insight-card" data-category="marketing">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-marketing mb-2">Маркетинг</span>
+              <h5 class="card-title mb-1">Виртуальная примерочная при нехватке площадей</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  8 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  4 часа назад
+                </span>
+              </div>
             </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Модельная одежда продается в точке с маленькой примерочной зоной. Клиенты уходят, не примерив нужные вещи.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-arrow-down"></i>
+                  Отток клиентов
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-arrows"></i>
+                  Малая площадь
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Необходимость примерки для стимулирования покупок</div>
+                  <div class="mx-3">VS</div>
+                  <div>Ограниченная площадь</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Покупатели могут быстро «примерить» как можно больше вещей без расширения помещения
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Установить интерактивное зеркало/виртуальную примерочную, где клиент «примеряет» на себя модель в цифровом формате. Это создает вау-эффект и экономит пространство.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Маркетинг кейс: Совместные акции -->
+      <div class="insight-card" data-category="marketing">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-marketing mb-2">Маркетинг</span>
+              <h5 class="card-title mb-1">Совместные акции с нетипичным партнером</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  7 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  5 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Низкая узнаваемость бренда на новом рынке, ограниченный рекламный бюджет.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-graph-down"></i>
+                  Низкая узнаваемость
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-cash-stack"></i>
+                  Малый бюджет
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Нужно быстро привлечь внимание</div>
+                  <div class="mx-3">VS</div>
+                  <div>Бюджет сильно ограничен</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Рекламные кампании идут с мощным охватом, но не требуют больших финансовых вливаний
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Найти неожиданного партнера (например, сеть кофеен, нестандартный ивент) и провести совместную коллаборацию: промо-акции, взаимные скидки, кросс-продажи. Разделить расходы — удвоить охват.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Маркетинг кейс: Персонализация -->
+      <div class="insight-card" data-category="marketing">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-marketing mb-2">Маркетинг</span>
+              <h5 class="card-title mb-1">Персонализация без больших затрат на CRM</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  11 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  6 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Клиенты уходят к конкурентам из-за недостатка индивидуального подхода. Большая CRM-система стоит дорого.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-person-x"></i>
+                  Отток клиентов
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-currency-dollar"></i>
+                  Высокая стоимость CRM
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Необходимость персонализации</div>
+                  <div class="mx-3">VS</div>
+                  <div>Ограничения бюджета</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Каждому клиенту уделяется персональное внимание с минимальными затратами
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Использовать бесплатные или простые инструменты автоматизации (чат-боты в мессенджерах, Google-таблицы, нейросеть для распознавания паттернов заказов). Постепенно наращивать функционал по мере роста.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Маркетинг кейс: Негативные отзывы -->
+      <div class="insight-card" data-category="marketing">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-marketing mb-2">Маркетинг</span>
+              <h5 class="card-title mb-1">Превращение негативных отзывов в контент</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  13 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  7 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Компания получает негативные отзывы в соцсетях; имидж падает.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-emoji-frown"></i>
+                  Негативные отзывы
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-graph-down"></i>
+                  Падение имиджа
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Негатив влияет на репутацию</div>
+                  <div class="mx-3">VS</div>
+                  <div>Любая реакция может только разжечь конфликт</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Клиенты видят, что компания не боится и адекватно реагирует на негатив, и при этом репутация улучшается
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Делать из негативных отзывов серию «кейсов улучшений»: публично разбирайте жалобы, предлагая решение. Затем публикуйте, как компания меняет процесс. Люди видят прозрачность, а негатив превращается в полезный контент.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Маркетинг кейс: UGC -->
+      <div class="insight-card" data-category="marketing">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-marketing mb-2">Маркетинг</span>
+              <h5 class="card-title mb-1">Маркетинг на пользовательском контенте</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  16 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  8 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Сложно генерировать много креатива в соцсетях. Бюджет на контент-студии ограничен.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-camera"></i>
+                  Нехватка контента
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-wallet2"></i>
+                  Ограничен бюджет
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Нужно часто обновлять контент</div>
+                  <div class="mx-3">VS</div>
+                  <div>Ограничен бюджет на фотографов/операторов</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Генерируется поток качественного контента без больших затрат
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Запустить UGC-кампании (User Generated Content) с призами и челленджами. Пользователи сами создают фото, видео, обзоры, делятся ими в соцсетях, формируя «живой» контент для бренда.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- HR кейс: Пул экспертов -->
+      <div class="insight-card" data-category="hr">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-hr mb-2">HR</span>
+              <h5 class="card-title mb-1">Пул экспертов на коротких контрактах</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  6 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  5 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">В пиковые периоды проектной компании часто не хватает экспертизы, а в межсезонье люди сидят без дела.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-graph-up-arrow"></i>
+                  Нестабильная нагрузка
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-currency-dollar"></i>
+                  Высокие издержки
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Нестабильная нагрузка</div>
+                  <div class="mx-3">VS</div>
+                  <div>Высокая стоимость содержания квалифицированных специалистов «впрок»</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Топ-эксперты есть всегда, но не нужно платить за их простой
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Создать "пул фрилансеров", работающих на гибком графике. Компания платит только за фактические часы, а в остальное время эксперты доступны на рынке.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- HR кейс: Обучение через стажировку -->
+      <div class="insight-card" data-category="hr">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-hr mb-2">HR</span>
+              <h5 class="card-title mb-1">Обучение через оборотную стажировку</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  9 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  6 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Новички боятся смены ролей и не видят карьерного роста. Отделы не хотят «отпускать» сотрудников на обучение.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-mortarboard"></i>
+                  Нужно обучение
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-cash-stack"></i>
+                  Ограничен бюджет
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Необходимость повышения квалификации</div>
+                  <div class="mx-3">VS</div>
+                  <div>Бюджет на обучение ограничен</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Сотрудники повышают свою экспертность и развиваются внутри компании без значительных затрат
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Организовать ротацию кадров (оборотную стажировку) внутри различных отделов. Сотрудники учатся «на месте», а HR фиксирует развитие компетенций каждого.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- HR кейс: Геймификация KPI -->
+      <div class="insight-card" data-category="hr">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-hr mb-2">HR</span>
+              <h5 class="card-title mb-1">Геймификация KPI</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  15 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  8 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Сотрудники не вовлечены в процесс достижения KPI, воспринимают его как сухие цифры.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-graph-down"></i>
+                  Низкая мотивация
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  KPI не достигаются
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Нужно мотивировать на показатели</div>
+                  <div class="mx-3">VS</div>
+                  <div>Система KPI кажется людям «карательной»</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Сотрудники сами стремятся к целям, продвигая KPI, при этом испытывают позитивные эмоции
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Внедрить геймификацию с командными челленджами, «прокачкой» навыков и призами за достижения. Люди сами хотят «прокачиваться» и перевыполнять KPI.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Менеджмент кейс: Распределение задач -->
+      <div class="insight-card" data-category="management">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-management mb-2">Менеджмент</span>
+              <h5 class="card-title mb-1">Распределение задач без конфликтов</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  14 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  3 часа назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Сотрудники не хотят брать сложные задачи, перекладывают ответственность друг на друга.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  Конфликты в команде
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-clock"></i>
+                  Срыв дедлайнов
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Нужно эффективное распределение задач</div>
+                  <div class="mx-3">VS</div>
+                  <div>Никто не хочет брать сложные задачи</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Задачи распределяются автоматически и справедливо, сотрудники довольны и мотивированы
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Внедрить систему ротации и балльную систему для задач. Сложные задачи дают больше баллов и бонусов. В конце месяца — рейтинг и премии по баллам.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Менеджмент кейс: Удаленная работа -->
+      <div class="insight-card" data-category="management">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-management mb-2">Менеджмент</span>
+              <h5 class="card-title mb-1">Контроль удаленной работы без микроменеджмента</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  18 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  4 часа назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Руководители не доверяют удаленным сотрудникам, постоянно проверяют и контролируют, что снижает продуктивность.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-graph-down"></i>
+                  Падение продуктивности
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-emoji-frown"></i>
+                  Стресс в команде
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Необходимость контроля работы</div>
+                  <div class="mx-3">VS</div>
+                  <div>Микроменеджмент снижает эффективность</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Работа контролируется автоматически, сотрудники чувствуют доверие и работают эффективно
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Внедрить систему OKR и автоматический трекинг результатов. Фокус на достижении целей, а не на времени за компьютером. Еженедельные командные созвоны для синхронизации.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Менеджмент кейс: Мотивация -->
+      <div class="insight-card" data-category="management">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-management mb-2">Менеджмент</span>
+              <h5 class="card-title mb-1">Мотивация без повышения зарплаты</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  21 участник
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  5 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Сотрудники теряют мотивацию, но бюджет на повышение зарплат ограничен.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-battery-half"></i>
+                  Низкая мотивация
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-wallet2"></i>
+                  Ограничен бюджет
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Необходимость мотивировать команду</div>
+                  <div class="mx-3">VS</div>
+                  <div>Нет возможности повысить зарплаты</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Сотрудники высокомотивированы и довольны работой без существенного увеличения расходов
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Создать систему нематериальной мотивации: гибкий график, возможность удаленной работы, обучение за счет компании, публичное признание достижений, дополнительные выходные за перевыполнение плана.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Менеджмент кейс: Коммуникация -->
+      <div class="insight-card" data-category="management">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-management mb-2">Менеджмент</span>
+              <h5 class="card-title mb-1">Эффективная коммуникация в большой команде</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  16 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  6 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">В команде из 50+ человек информация теряется, много времени уходит на коммуникацию.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-chat-square-x"></i>
+                  Потеря информации
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-clock-history"></i>
+                  Долгие согласования
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Необходимость быстрой коммуникации</div>
+                  <div class="mx-3">VS</div>
+                  <div>Большое количество участников</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Информация быстро доходит до всех участников без потерь и искажений
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Создать систему информационных хабов: ключевые сотрудники отвечают за распространение информации в своих подгруппах. Внедрить единую базу знаний с быстрым поиском и автоматическими уведомлениями.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Менеджмент кейс: Инновации -->
+      <div class="insight-card" data-category="management">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-management mb-2">Менеджмент</span>
+              <h5 class="card-title mb-1">Внедрение инноваций без сопротивления</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  19 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  7 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Сотрудники сопротивляются внедрению новых технологий и изменению процессов.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-x-circle"></i>
+                  Сопротивление изменениям
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-arrow-clockwise"></i>
+                  Медленное внедрение
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Необходимость внедрения инноваций</div>
+                  <div class="mx-3">VS</div>
+                  <div>Сопротивление персонала</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Сотрудники сами стремятся к инновациям и активно участвуют в их внедрении
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Создать программу "инновационных амбассадоров": выбрать активных сотрудников, обучить их новым технологиям, дать им бонусы за обучение коллег. Они становятся проводниками изменений внутри команд.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Операционка кейс: Оптимизация склада -->
+      <div class="insight-card" data-category="operational">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-operational mb-2">Операционка</span>
+              <h5 class="card-title mb-1">Оптимизация складских операций</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  15 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  3 часа назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Большие затраты на хранение товара, медленная обработка заказов из-за неэффективной организации склада.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-cash-stack"></i>
+                  Высокие издержки
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-clock-history"></i>
+                  Долгая обработка
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Необходимость быстрой обработки</div>
+                  <div class="mx-3">VS</div>
+                  <div>Ограниченность складского пространства</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Товары находятся и обрабатываются мгновенно, занимая минимум места
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Внедрить систему динамического хранения: товары размещаются по частоте заказов, а не по категориям. Популярные позиции — ближе к зоне отгрузки. Автоматизировать учет через штрих-коды.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Операционка кейс: Автоматизация -->
+      <div class="insight-card" data-category="operational">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-operational mb-2">Операционка</span>
+              <h5 class="card-title mb-1">Автоматизация рутинных процессов</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  17 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  4 часа назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Сотрудники тратят 40% времени на заполнение отчетов и рутинные операции вместо продуктивной работы.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-clock"></i>
+                  40% на рутину
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-graph-down"></i>
+                  Низкая эффективность
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Необходимость отчетности</div>
+                  <div class="mx-3">VS</div>
+                  <div>Потеря времени на рутину</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Отчеты формируются автоматически, сотрудники занимаются только продуктивной работой
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Внедрить RPA (Robotic Process Automation) для автоматического сбора данных и формирования отчетов. Создать единую систему, где отчеты генерируются на основе реальных действий сотрудников.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Операционка кейс: Качество -->
+      <div class="insight-card" data-category="operational">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-operational mb-2">Операционка</span>
+              <h5 class="card-title mb-1">Контроль качества без задержек</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  20 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  5 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Отдел контроля качества не справляется с потоком продукции, создавая задержки в производстве.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  Задержки производства
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-arrow-clockwise"></i>
+                  Длительные проверки
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Тщательный контроль качества</div>
+                  <div class="mx-3">VS</div>
+                  <div>Скорость производства</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Контроль качества происходит мгновенно и не влияет на скорость производства
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Внедрить систему машинного зрения для автоматического контроля качества прямо на конвейере. Человеческий контроль только для сложных случаев.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Операционка кейс: Логистика -->
+      <div class="insight-card" data-category="operational">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-operational mb-2">Операционка</span>
+              <h5 class="card-title mb-1">Оптимизация маршрутов доставки</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  14 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  6 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Курьеры тратят много времени на дорогу, высокий расход топлива, частые опоздания.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-fuel-pump"></i>
+                  Перерасход топлива
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-clock-history"></i>
+                  Задержки доставки
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Быстрая доставка всем клиентам</div>
+                  <div class="mx-3">VS</div>
+                  <div>Оптимизация затрат на маршруты</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Доставка происходит быстро и с минимальными затратами на топливо
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Внедрить AI-систему планирования маршрутов с учетом трафика, расстояний и временных окон доставки. Группировать заказы по географическим зонам.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Операционка кейс: Производство -->
+      <div class="insight-card" data-category="operational">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-operational mb-2">Операционка</span>
+              <h5 class="card-title mb-1">Гибкое производство под заказ</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  18 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  7 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Большие остатки невостребованной продукции при нехватке популярных позиций.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-box-seam"></i>
+                  Излишки на складе
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-x-circle"></i>
+                  Дефицит популярных товаров
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Быстрое производство под спрос</div>
+                  <div class="mx-3">VS</div>
+                  <div>Длительная перенастройка линий</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Производство мгновенно адаптируется под текущий спрос без лишних запасов
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Внедрить модульную систему производства с быстрой переналадкой. Использовать предиктивную аналитику спроса для планирования объемов.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Стратегия кейс: Выход на новый рынок -->
+      <div class="insight-card" data-category="strategy">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-strategy mb-2">Стратегия</span>
+              <h5 class="card-title mb-1">Выход на новый рынок без больших инвестиций</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  22 участника
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  2 часа назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Компания хочет выйти на новый рынок, но не имеет достаточно средств для масштабной экспансии.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-cash-stack"></i>
+                  Ограниченный бюджет
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-graph-up"></i>
+                  Высокая конкуренция
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Необходимость быстрого входа на рынок</div>
+                  <div class="mx-3">VS</div>
+                  <div>Ограниченность ресурсов</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Компания успешно работает на новом рынке без значительных первоначальных вложений
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Использовать модель white label: производить продукцию под брендами уже известных на рынке компаний. Это дает быстрый вход без затрат на продвижение бренда.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Стратегия кейс: Диверсификация -->
+      <div class="insight-card" data-category="strategy">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-strategy mb-2">Стратегия</span>
+              <h5 class="card-title mb-1">Диверсификация без потери фокуса</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  19 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  3 часа назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Компания зависит от одного продукта/рынка, но попытки диверсификации размывают ресурсы и внимание.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  Высокие риски
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-arrow-left-right"></i>
+                  Распыление ресурсов
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Необходимость диверсификации</div>
+                  <div class="mx-3">VS</div>
+                  <div>Сохранение эффективности</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Компания успешно развивает новые направления, сохраняя эффективность в основном бизнесе
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Создать отдельные бизнес-юниты с независимыми командами и KPI, но общей инфраструктурой. Каждое направление развивается автономно, используя синергию с основным бизнесом.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Стратегия кейс: Цифровая трансформация -->
+      <div class="insight-card" data-category="strategy">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-strategy mb-2">Стратегия</span>
+              <h5 class="card-title mb-1">Цифровая трансформация традиционного бизнеса</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  25 участников
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  4 часа назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Традиционный бизнес теряет долю рынка из-за цифровых конкурентов, но внедрение технологий встречает сопротивление.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-graph-down"></i>
+                  Падение доли рынка
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-x-circle"></i>
+                  Сопротивление изменениям
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Необходимость цифровизации</div>
+                  <div class="mx-3">VS</div>
+                  <div>Сохранение текущих процессов</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Бизнес успешно использует цифровые технологии, сохраняя свои сильные стороны
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Создать цифровой стартап внутри компании, который работает параллельно с основным бизнесом. Постепенно переводить клиентов на цифровые каналы, сохраняя традиционные для консервативных клиентов.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Стратегия кейс: Инновации -->
+      <div class="insight-card" data-category="strategy">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-strategy mb-2">Стратегия</span>
+              <h5 class="card-title mb-1">Внедрение инноваций в консервативной отрасли</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  21 участник
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  5 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Отрасль требует инноваций, но клиенты и регуляторы с подозрением относятся к изменениям.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-shield-exclamation"></i>
+                  Регуляторные барьеры
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-person-x"></i>
+                  Консерватизм клиентов
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Потребность в инновациях</div>
+                  <div class="mx-3">VS</div>
+                  <div>Консерватизм рынка</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Инновации внедряются безболезненно и принимаются всеми участниками рынка
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Создать инновационный консорциум с участием регуляторов и ключевых игроков рынка. Тестировать инновации в регулятивной "песочнице" с ограниченной группой лояльных клиентов.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Стратегия кейс: Устойчивое развитие -->
+      <div class="insight-card" data-category="strategy">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-strategy mb-2">Стратегия</span>
+              <h5 class="card-title mb-1">Устойчивое развитие без потери прибыльности</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  23 участника
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  6 часов назад
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Проблема</small>
+              <p class="mb-2">Переход на экологичные технологии требует больших инвестиций и может снизить маржинальность бизнеса.</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-currency-dollar"></i>
+                  Высокие затраты
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-graph-down"></i>
+                  Риск снижения прибыли
+                </span>
+              </div>
+            </div>
+
+            <!-- Этапы -->
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Конфликтующая пара
+                </div>
+              </div>
+              <div class="case-stage-content">
+                <div class="d-flex justify-content-between">
+                  <div>Экологическая ответственность</div>
+                  <div class="mx-3">VS</div>
+                  <div>Сохранение прибыльности</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-stage completed">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Идеальный конечный результат
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Бизнес становится экологичным и при этом увеличивает прибыль
+              </div>
+            </div>
+
+            <div class="case-stage">
+              <div class="case-stage-header">
+                <div class="case-stage-title">
+                  <i class="bi bi-lightbulb me-2"></i>
+                  Инсайт
+                </div>
+              </div>
+              <div class="case-stage-content">
+                Создать премиальную эко-линейку продукции с высокой маржой. Использовать "зеленые" облигации для финансирования перехода. Монетизировать углеродные квоты.
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-primary">Присоединиться</button>
           </div>
         </div>
       </div>
@@ -979,31 +3257,32 @@
   </div>
 
   <!-- Нижняя навигация -->
-  <div class="bottom-nav">
-    <div class="container">
-      <div class="d-flex justify-content-between align-items-center">
-        <a href="#" class="nav-link active" data-nav="insights">
-          <i class="bi bi-lightbulb-fill"></i>
-          <span>Инсайты</span>
+  <nav class="bottom-nav">
+    <div class="bottom-nav-content">
+      <div class="nav-group">
+        <a href="#" class="nav-item active" onclick="handleNavClick(this, 'home')">
+          <i class="bi bi-house-fill"></i>
         </a>
-        <a href="#" class="nav-link" data-nav="search">
+        <a href="#" class="nav-item" onclick="handleNavClick(this, 'search')">
           <i class="bi bi-search"></i>
-          <span>Поиск</span>
         </a>
-        <button class="btn btn-primary" style="width: 48px; height: 48px; border-radius: 24px" data-bs-toggle="modal" data-bs-target="#newCaseModal">
-          <i class="bi bi-plus-lg"></i>
-        </button>
-        <a href="#" class="nav-link" data-nav="saved">
-          <i class="bi bi-bookmark"></i>
-          <span>Сохранённые</span>
+      </div>
+      
+      <button class="add-button" onclick="handleNewCase()">
+        <i class="bi bi-lightbulb"></i>
+      </button>
+      
+      <div class="nav-group">
+        <a href="#" class="nav-item" onclick="handleNavClick(this, 'notifications')">
+          <i class="bi bi-bell"></i>
+          <span class="notification-indicator active pulse">3</span>
         </a>
-        <a href="#" class="nav-link" data-nav="profile">
+        <a href="#" class="nav-item" onclick="handleNavClick(this, 'profile')">
           <i class="bi bi-person"></i>
-          <span>Профиль</span>
         </a>
       </div>
     </div>
-  </div>
+  </nav>
 
   <!-- Модальное окно нового кейса -->
   <div class="modal fade" id="newCaseModal" tabindex="-1">
@@ -1120,11 +3399,11 @@
   </div>
 
   <!-- Модальное окно профиля -->
-  <div class="modal fade" id="profileModal" tabindex="-1">
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header border-0 pb-0">
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body pt-0">
           <!-- Шапка профиля -->
@@ -1253,6 +3532,48 @@
     // Инициализация Telegram Mini App
     let tg = window.Telegram.WebApp;
     tg.expand();
+    tg.disableVerticalSwipes();
+
+    // Обработка сплэш-экрана
+    document.addEventListener("DOMContentLoaded", function() {
+      const splashScreen = document.getElementById("splashScreen");
+      if (splashScreen) {
+        setTimeout(() => {
+          splashScreen.style.opacity = "0";
+          setTimeout(() => {
+            splashScreen.style.display = "none";
+          }, 500);
+        }, 1000);
+      }
+
+      // Показываем карточки после скрытия сплэш-экрана
+      const cards = document.querySelectorAll(".insight-feed .insight-card");
+      cards.forEach((card, i) => {
+        setTimeout(() => {
+          card.classList.add("show");
+        }, 1500 + i * 100);
+      });
+    });
+
+    // Инициализация всех модальных окон Bootstrap
+    document.addEventListener('DOMContentLoaded', function() {
+      // Инициализируем все модальные окна
+      const modals = document.querySelectorAll('.modal');
+      modals.forEach(modal => {
+        new bootstrap.Modal(modal);
+      });
+    });
+
+    // Функция показа профиля
+    function showProfile() {
+      const profileModal = document.getElementById('profileModal');
+      if (profileModal) {
+        const modal = new bootstrap.Modal(profileModal);
+        modal.show();
+      } else {
+        console.error('Модальное окно профиля не найдено');
+      }
+    }
 
     // Конфигурация
     const CONFIG = {
@@ -1516,20 +3837,6 @@
       modal.querySelector('form').reset();
     });
 
-    // Сплэш-экран
-    window.addEventListener("load", function () {
-      const splashScreen = document.getElementById("splashScreen");
-      if (!splashScreen) return;
-      
-      // Уменьшаем время показа сплэш-экрана до 2 секунд
-      setTimeout(function () {
-        splashScreen.style.opacity = "0";
-        setTimeout(() => {
-          splashScreen.style.display = "none";
-        }, 500);
-      }, 2000); // Было 4500, теперь 2000
-    });
-
     // Показ профиля
     function showProfile() {
       const profileModal = new bootstrap.Modal(document.getElementById("profileModal"));
@@ -1704,26 +4011,26 @@
                 <h6 class="mb-1">Идеальный конечный результат</h6>
                 <small class="text-primary">
                   <i class="bi bi-people"></i>
-                  Необходимо собрать команду
+                  Сбор команды
                 </small>
               </div>
             </div>
             <div class="stage-content show">
               <div class="alert alert-info mb-3">
                 <i class="bi bi-info-circle me-2"></i>
-                Для начала работы над ИКР необходимо собрать команду из ${CONFIG.stages.ikr.min} участников
+                Товар всегда под рукой, но не требует постоянного склада
               </div>
               <div class="participants-progress mb-3">
                 <div class="progress" style="height: 4px;">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 0%"></div>
+                  <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"></div>
                 </div>
-                <small class="text-muted d-flex justify-content-between align-items-center mt-2">
-                  <span>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                  <small class="text-muted">
                     <i class="bi bi-people"></i>
-                    Нужно ещё ${CONFIG.stages.ikr.min} участников
-                  </span>
-                  <span class="badge bg-light text-dark">0/${CONFIG.stages.ikr.min}</span>
-                </small>
+                    Нужен ещё 1 участник
+                  </small>
+                  <span class="badge bg-light text-dark">4/5</span>
+                </div>
               </div>
               <div class="d-flex gap-2 justify-content-center">
                 <button class="btn btn-primary" onclick="inviteParticipants('${caseId}')">
@@ -1787,150 +4094,74 @@
           </div>
         </div>
       `;
-
-      // Обновляем заголовок
-      ikrStage.querySelector('.stage-header small').innerHTML = `
-        <i class="bi bi-people"></i>
-        Сбор участников
-      `;
     }
 
-    // Функция для приглашения участников
-    function inviteParticipants(caseId) {
-      tg.sendData(JSON.stringify({
-        action: 'INVITE_PARTICIPANTS',
-        caseId: caseId,
-        stage: 'ikr',
-        requiredCount: CONFIG.stages.ikr.min
-      }));
-    }
-
-    // Функция для редактирования результатов
-    function editResults(caseId) {
-      const card = document.querySelector(`.insight-card[data-case-id="${caseId}"]`);
-      const caseData = store.cases.find(c => c.id === caseId);
+    // Обработчик клика по навигации
+    function handleNavClick(element, section) {
+      // Убираем активный класс у всех элементов
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
       
-      if (confirm('Вы уверены, что хотите отредактировать результаты?')) {
-        const content = card.querySelector('.stage:first-child .stage-content');
-        content.innerHTML = `
-          <div class="conflict-pair">
-            <div class="conflict-element">
-              <span class="element-label">Что должно быть?</span>
-              <input type="text" class="form-control form-control-sm" value="${caseData.stages.conflict.positive}">
-            </div>
-            <div class="conflict-vs">VS</div>
-            <div class="conflict-element">
-              <span class="element-label">Чему это мешает?</span>
-              <input type="text" class="form-control form-control-sm" value="${caseData.stages.conflict.negative}">
-            </div>
-          </div>
-          <div class="mt-3 d-flex justify-content-end">
-            <button class="btn btn-sm btn-primary" onclick="saveConflictPair('${caseId}')">
-              <i class="bi bi-check-lg"></i>
-              Сохранить изменения
-            </button>
-          </div>
-        `;
+      // Добавляем активный класс нажатому элементу
+      element.classList.add('active');
+      
+      // Обрабатываем различные секции
+      switch(section) {
+        case 'home':
+          filterCases('Все кейсы');
+          break;
+        case 'search':
+          // Показываем поиск
+          tg.showSearchField();
+          break;
+        case 'notifications':
+          // Показываем уведомления
+          showNotifications();
+          break;
+        case 'profile':
+          // Показываем профиль
+          showProfile();
+          break;
       }
     }
 
-    // Обновляем функцию обработки новых участников
-    function onParticipantJoined(caseId, participant) {
-      const caseData = store.cases.find(c => c.id === caseId);
-      if (!caseData) return;
+    // Обработчик новой идеи
+    function handleNewCase() {
+      const newCaseModal = new bootstrap.Modal(document.getElementById('newCaseModal'));
+      newCaseModal.show();
+    }
 
-      // Добавляем участника
-      caseData.participants.members.push(participant);
-      
-      // Обновляем UI
-      const card = document.querySelector(`.insight-card[data-case-id="${caseId}"]`);
-      if (!card) return;
-
-      const membersCount = caseData.participants.members.length;
-      const requiredCount = CONFIG.stages.ikr.min;
-      const percentage = Math.min((membersCount / requiredCount) * 100, 100);
-
-      // Обновляем прогресс-бар
-      const progressBar = card.querySelector('.progress-bar');
-      if (progressBar) {
-        progressBar.style.width = `${percentage}%`;
+    // Показ уведомлений
+    function showNotifications() {
+      const indicator = document.querySelector('.notification-indicator');
+      if (indicator) {
+        indicator.classList.remove('active', 'pulse');
       }
-
-      // Обновляем текст
-      const participantsText = card.querySelector('.participants-progress small span:first-child');
-      const participantsCounter = card.querySelector('.participants-progress .badge');
       
-      if (participantsText && participantsCounter) {
-        if (membersCount >= requiredCount) {
-          participantsText.innerHTML = `
-            <i class="bi bi-check-circle-fill text-success"></i>
-            Команда собрана
-          `;
-          // Активируем кнопку старта ИКР
-          const startButton = document.createElement('button');
-          startButton.className = 'btn btn-success w-100 mt-3';
-          startButton.innerHTML = `
-            <i class="bi bi-play-fill me-2"></i>
-            Начать работу над ИКР
-          `;
-          startButton.onclick = () => startIKR(caseId);
-          card.querySelector('.stage-content').appendChild(startButton);
+      tg.showPopup({
+        title: 'Уведомления',
+        message: '- Новый участник присоединился к кейсу\n- Этап "Конфликтующая пара" завершен\n- Получен новый инсайт',
+        buttons: [{
+          id: 'ok',
+          type: 'ok',
+          text: 'Прочитано'
+        }]
+      });
+    }
+
+    // Функция для обновления счетчика уведомлений
+    function updateNotificationCount(count) {
+      const indicator = document.querySelector('.notification-indicator');
+      if (indicator) {
+        if (count > 0) {
+          indicator.textContent = count > 9 ? '9+' : count;
+          indicator.classList.add('active', 'pulse');
         } else {
-          participantsText.innerHTML = `
-            <i class="bi bi-people"></i>
-            Нужно ещё ${requiredCount - membersCount} участников
-          `;
+          indicator.classList.remove('active', 'pulse');
         }
-        participantsCounter.textContent = `${membersCount}/${requiredCount}`;
       }
     }
-
-    // Функция для начала работы над ИКР
-    function startIKR(caseId) {
-      const caseData = store.cases.find(c => c.id === caseId);
-      if (!caseData) return;
-
-      const card = document.querySelector(`.insight-card[data-case-id="${caseId}"]`);
-      if (!card) return;
-
-      const ikrStage = card.querySelector('.stage:nth-child(2)');
-      if (!ikrStage) return;
-
-      // Показываем форму ИКР
-      ikrStage.querySelector('.stage-content').innerHTML = `
-        <div class="alert alert-info mb-3">
-          <i class="bi bi-info-circle me-2"></i>
-          Сформулируйте идеальный конечный результат
-        </div>
-        <div class="ikr-form">
-          <div class="mb-3">
-            <label class="form-label">Система сама...</label>
-            <input type="text" class="form-control" placeholder="Например: передает все задачи без потерь">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">При этом...</label>
-            <input type="text" class="form-control" placeholder="Например: не требует дополнительных ресурсов">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">А если...</label>
-            <input type="text" class="form-control" placeholder="Например: возникают ошибки, система сама их исправляет">
-          </div>
-          <div class="d-flex justify-content-end">
-            <button class="btn btn-primary" onclick="saveIKR('${caseId}')">
-              <i class="bi bi-check-lg me-2"></i>
-              Сохранить ИКР
-            </button>
-          </div>
-        </div>
-      `;
-    }
-
-    // Обработчик ответа на попап
-    tg.onEvent('popupClosed', (event) => {
-      if (event.button_id === 'invite') {
-        inviteParticipants(event.caseId);
-      }
-    });
   </script>
 </body>
 </html>
