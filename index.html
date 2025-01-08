@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>InsightFlow - ТРИЗ</title>
+
+  <!-- Bootstrap CSS и иконки -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" />
+
+  <!-- Telegram WebApp JS -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    :root {
+      /* Темная тема в стиле ChatGPT */
+      --primary: #10a37f;
+      --primary-dark: #0e8c6d;
+      --secondary: #6e7681;
+      --success: #238636;
+      --warning: #9e6a03;
+      --danger: #da3633;
+      --info: #58a6ff;
+      
+      /* Нейтральные цвета в стиле ChatGPT */
+      --bg-color: #0c0c0c;
+      --card-bg: #1c1c1c;
+      --card-bg-hover: #2a2a2a;
+      --card-border: #2f2f2f;
+      --text-primary: #ffffff;
+      --text-secondary: #8e8e8e;
+      --border-color: #2f2f2f;
+      
+      /* Дополнительные цвета */
+      --gradient-start: #0e8c6d;
+      --gradient-end: #10a37f;
+      
+      /* Размеры */
+      --header-height: 56px;
+      --bottom-nav-height: 72px;
+      --container-padding: 16px;
+      --card-border-radius: 16px;
+    }
+
+    /* Общие стили */
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      padding-bottom: var(--bottom-nav-height);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    }
+
+    .container {
+      padding-left: var(--container-padding);
+      padding-right: var(--container-padding);
+    }
+
+    /* Сплэш-экран */
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes morphing {
+      0% {
+        border-radius: 60% 40% 30% 70%/60% 30% 70% 40%;
+      }
+      50% {
+        border-radius: 30% 60% 70% 40%/50% 60% 30% 60%;
+      }
+      100% {
+        border-radius: 60% 40% 30% 70%/60% 30% 70% 40%;
+      }
+    }
+
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+
+    .splash-logo {
+      width: 120px;
+      height: 120px;
+      position: relative;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+
+    .splash-logo::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+      background-size: 200% 200%;
+      animation: 
+        gradientAnimation 4s ease infinite,
+        morphing 8s ease-in-out infinite;
+    }
+
+    .splash-slogan {
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 0.8s forwards;
+      animation-delay: 1s;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .splash-slogan .primary-text {
+      font-size: 42px;
+      font-weight: 600;
+      background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .splash-slogan .secondary-text {
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--text-primary);
+      opacity: 0;
+      animation: fadeUp 0.8s forwards;
+      animation-delay: 1.5s;
+    }
+
+    /* Шапка */
+    .tg-header {
+      height: var(--header-height);
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: none;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      font-size: 24px;
+    }
+
+    .btn-icon:hover {
+      background-color: var(--bg-color);
+    }
+
+    /* Фильтры */
+    .filter-section {
+      padding: 16px 0;
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+
+    .filter-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .chip {
+      padding: 8px 16px;
+      background-color: var(--bg-color);
+      border-radius: 16px;
+      font-size: 14px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .chip:hover {
+      background-color: var(--border-color);
+    }
+
+    .chip.active {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    /* Карточки инсайтов */
+    .insight-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--card-border-radius);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 
+                  0 8px 16px rgba(0, 0, 0, 0.1);
+      margin-bottom: 16px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .insight-card:hover {
+      background-color: var(--card-bg-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 
+                  0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .insight-card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .category-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      background: rgba(16, 163, 127, 0.1);
+      color: var(--primary);
+      backdrop-filter: blur(8px);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+      backdrop-filter: blur(8px);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 12px 0;
+    }
+
+    .insight-detail {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .text-muted {
+      color: var(--text-secondary) !important;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .insight-detail p {
+      color: var(--text-primary);
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 8px 0;
+    }
+
+    .participation-stats {
+      display: flex;
+      gap: 16px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      margin-top: 16px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .stat-item i {
+      font-size: 16px;
+    }
+
+    .stat-item.active {
+      color: var(--primary);
+    }
+
+    /* Добавляем стили для разделителей между статистикой */
+    .participation-stats .stat-item:not(:last-child) {
+      padding-right: 16px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .insight-stats {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .insight-stat {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .progress-mini {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .progress-step {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+    }
+
+    .progress-step.active {
+      color: var(--primary);
+    }
+
+    .progress-line {
+      width: 16px;
+      height: 2px;
+      background-color: var(--border-color);
+    }
+
+    .metric-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      background-color: var(--bg-color);
+      color: var(--text-secondary);
+    }
+
+    /* Этапы */
+    .stages-progress {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .stage {
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .stage-header {
+      padding: 16px;
+      background-color: var(--bg-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .stage-content {
+      padding: 16px;
+      background-color: var(--card-bg);
+    }
+
+    .conflict-pair {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .conflict-element {
+      flex: 1;
+    }
+
+    .element-label {
+      display: block;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .conflict-vs {
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* Нижняя навигация */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: var(--bottom-nav-height);
+      background-color: var(--card-bg);
+      border-top: 1px solid var(--border-color);
+      z-index: 100;
+      padding: 8px 0;
+    }
+
+    .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .nav-link i {
+      font-size: 24px;
+    }
+
+    .nav-link.active {
+      color: var(--primary);
+    }
+
+    /* Профиль */
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      background-color: var(--primary);
+      color: white;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 600;
+    }
+
+    .level-badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 24px;
+      height: 24px;
+      background-color: var(--warning);
+      color: var(--text-primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      border: 2px solid var(--card-bg);
+    }
+
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      background-color: var(--bg-color);
+      color: var(--text-secondary);
+    }
+
+    .level-progress .progress {
+      height: 8px;
+      border-radius: 4px;
+      background-color: var(--bg-color);
+    }
+
+    .level-progress .progress-bar {
+      background-color: var(--primary);
+      border-radius: 4px;
+    }
+
+    .section-block {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-title {
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .achievement-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+
+    .achievement-icon {
+      width: 48px;
+      height: 48px;
+      background-color: var(--bg-color);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--text-secondary);
+    }
+
+    .achievement-item.achieved .achievement-icon {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .achievement-item span {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .friends-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .friend-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background-color: var(--bg-color);
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .friend-avatar {
+      width: 48px;
+      height: 48px;
+      background-color: var(--primary);
+      color: white;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .friend-info {
+      flex: 1;
+    }
+
+    .friend-name {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .friend-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .level-indicator {
+      padding: 2px 8px;
+      background-color: var(--warning);
+      border-radius: 8px;
+      color: var(--text-primary);
+    }
+
+    .friend-achievements {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Модальные окна */
+    .modal-content {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+    }
+
+    .modal-header {
+      border-bottom-color: var(--border-color);
+    }
+
+    .modal-footer {
+      border-top-color: var(--border-color);
+    }
+
+    /* Формы */
+    .form-control, .form-select {
+      background-color: var(--bg-color);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .form-control:focus, .form-select:focus {
+      background-color: var(--bg-color);
+      border-color: var(--primary);
+      color: var(--text-primary);
+      box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.2);
+    }
+
+    /* Кнопки */
+    .btn {
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 163, 127, 0.2);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--bg-color);
+      border-color: var(--border-color);
+    }
+
+    /* Решения */
+    .solution-card {
+      padding: 16px;
+      background-color: var(--bg-color);
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    .solution-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .author-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+      background-color: var(--primary);
+      color: white;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .fw-500 {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <!-- Сплэш-экран -->
+  <div class="splash-screen" id="splashScreen">
+    <div class="splash-logo"></div>
+    <div class="splash-slogan">
+      <span class="primary-text">Всем проблемам</span>
+      <span class="secondary-text">ИНСАЙТ</span>
+    </div>
+  </div>
+
+  <!-- Навигация -->
+  <div class="tg-header">
+    <div class="container d-flex justify-content-between align-items-center py-2">
+      <span class="header-title">ТРИЗ</span>
+      <button class="btn-icon" onclick="showProfile()">
+        <i class="bi bi-person-circle"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Фильтры -->
+  <div class="filter-section">
+    <div class="container">
+      <div class="filter-chips">
+        <div class="chip active">Все кейсы</div>
+        <div class="chip">HR</div>
+        <div class="chip">Маркетинг</div>
+        <div class="chip">Менеджмент</div>
+        <div class="chip">Операционка</div>
+        <div class="chip">Стратегия</div>
+        <div class="chip">Рыночный</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Основной контент -->
+  <div class="container main-content">
+    <div class="insight-feed">
+      <!-- Операционные кейсы -->
+      <div class="insight-card card mb-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-operational mb-2">Операционный</span>
+              <h5 class="card-title mb-1">Потери при передаче смен</h5>
+            </div>
+            <span class="status-badge status-facts">
+              <i class="bi bi-clipboard-data"></i>
+              Сбор фактов
+            </span>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-2">
+              <small class="text-muted d-block mb-1">X-элемент</small>
+              <p class="mb-0">30% задач теряется при передаче между сменами</p>
+            </div>
+            <div>
+              <small class="text-muted d-block mb-1">Текущий этап</small>
+              <p class="mb-0">Сбор фактов о проблеме и её влиянии на процессы</p>
+            </div>
+          </div>
+
+          <div class="participation-stats">
+            <div class="stat-item active">
+              <i class="bi bi-people-fill"></i>
+              12 участников
+            </div>
+            <div class="stat-item">
+              <i class="bi bi-chat-dots"></i>
+              8 предложений
+            </div>
+            <div class="stat-item">
+              <i class="bi bi-hourglass-split"></i>
+              60%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Мой новый кейс -->
+      <div class="insight-card card mb-4" data-my-case="true">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="category-badge category-operational mb-2">Мой кейс</span>
+              <h5 class="card-title mb-1">Потери при передаче смен</h5>
+              <div class="insight-stats">
+                <span class="insight-stat">
+                  <i class="bi bi-people-fill"></i>
+                  1 участник
+                </span>
+                <span class="insight-stat">
+                  <i class="bi bi-clock"></i>
+                  Только что
+                </span>
+              </div>
+            </div>
+            <div class="d-flex flex-column align-items-end">
+              <span class="status-badge mb-2">Новый</span>
+              <div class="progress-mini">
+                <div class="progress-step active">
+                  <i class="bi bi-1-circle-fill"></i>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step">
+                  <i class="bi bi-2-circle"></i>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step">
+                  <i class="bi bi-3-circle"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-detail mb-3">
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">X-элемент</small>
+              <p class="mb-2">30% задач теряется при передаче между сменами</p>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  30% потерь
+                </span>
+                <span class="metric-badge">
+                  <i class="bi bi-people"></i>
+                  3 смены
+                </span>
+              </div>
+            </div>
+
+            <div class="stages-progress">
+              <!-- Этап 1: Конфликтующая пара -->
+              <div class="stage active">
+                <div class="stage-header" data-bs-toggle="collapse" data-bs-target="#conflictStageNew">
+                  <div>
+                    <h6 class="mb-1">Конфликтующая пара</h6>
+                    <small class="text-muted">Нужно 3 участника для формирования</small>
+                  </div>
+                  <button class="btn btn-sm btn-primary">
+                    <i class="bi bi-plus-lg"></i>
+                    Участвовать
+                  </button>
+                </div>
+                <div id="conflictStageNew" class="stage-content collapse show">
+                  <div class="mb-3">
+                    <div class="alert alert-info">
+                      <i class="bi bi-info-circle me-2"></i>
+                      Сформулируйте противоречие, которое приводит к потере задач
+                    </div>
+                  </div>
+                  <div class="conflict-pair">
+                    <div class="conflict-element">
+                      <span class="element-label">Что должно быть?</span>
+                      <input type="text" class="form-control form-control-sm" placeholder="Например: Быстрая передача" />
+                    </div>
+                    <div class="conflict-vs">VS</div>
+                    <div class="conflict-element">
+                      <span class="element-label">Чему это мешает?</span>
+                      <input type="text" class="form-control form-control-sm" placeholder="Например: Точность информации" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Этап 2: ИКР -->
+              <div class="stage">
+                <div class="stage-header">
+                  <div>
+                    <h6 class="mb-1">Идеальный конечный результат</h6>
+                    <small class="text-muted">Откроется после формирования конфликта</small>
+                  </div>
+                  <button class="btn btn-sm btn-outline-secondary" disabled>
+                    <i class="bi bi-lock"></i>
+                    Заблокировано
+                  </button>
+                </div>
+              </div>
+
+              <!-- Этап 3: Инсайты -->
+              <div class="stage">
+                <div class="stage-header">
+                  <div>
+                    <h6 class="mb-1">Инсайты</h6>
+                    <small class="text-muted">Откроется после определения ИКР</small>
+                  </div>
+                  <button class="btn btn-sm btn-outline-secondary" disabled>
+                    <i class="bi bi-lock"></i>
+                    Заблокировано
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-bookmark"></i>
+              </button>
+              <button class="btn btn-sm btn-outline">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+            <div class="d-flex gap-2">
+              <span class="metric-badge">
+                <i class="bi bi-clock"></i>
+                23:59:59
+              </span>
+              <button class="btn btn-sm btn-primary">Обсудить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Нижняя навигация -->
+  <div class="bottom-nav">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <a href="#" class="nav-link active" data-nav="insights">
+          <i class="bi bi-lightbulb-fill"></i>
+          <span>Инсайты</span>
+        </a>
+        <a href="#" class="nav-link" data-nav="search">
+          <i class="bi bi-search"></i>
+          <span>Поиск</span>
+        </a>
+        <button class="btn btn-primary" style="width: 48px; height: 48px; border-radius: 24px" data-bs-toggle="modal" data-bs-target="#newCaseModal">
+          <i class="bi bi-plus-lg"></i>
+        </button>
+        <a href="#" class="nav-link" data-nav="saved">
+          <i class="bi bi-bookmark"></i>
+          <span>Сохранённые</span>
+        </a>
+        <a href="#" class="nav-link" data-nav="profile">
+          <i class="bi bi-person"></i>
+          <span>Профиль</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно нового кейса -->
+  <div class="modal fade" id="newCaseModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Новый бизнес-кейс</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-4">
+              <label class="form-label">Категория</label>
+              <select class="form-select">
+                <option value="operational">Операционный кейс</option>
+                <option value="strategic">Стратегический кейс</option>
+                <option value="hr">HR кейс</option>
+                <option value="market">Рыночный кейс</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Краткое описание проблемы</label>
+              <input type="text" class="form-control" placeholder="В чём суть проблемы?" />
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Ключевые метрики</label>
+              <textarea class="form-control" rows="2" placeholder="Какие показатели характеризуют проблему?"></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Желаемый результат</label>
+              <textarea class="form-control" rows="2" placeholder="Какой результат хотите получить?"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-bs-dismiss="modal">Отмена</button>
+          <button type="button" class="btn btn-primary">Опубликовать</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно деталей инсайта -->
+  <div class="modal fade" id="insightDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Детали кейса</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <span class="category-badge category-operational mb-3">Операционный кейс</span>
+          <h5 class="mb-4">Высокая текучка линейного персонала</h5>
+
+          <div class="insight-detail mb-4">
+            <h6 class="mb-3">Описание проблемы</h6>
+            <p>Ежемесячная текучка 30% среди линейного персонала создаёт серьёзные операционные проблемы:</p>
+            <ul class="mb-0">
+              <li>Затраты на подбор: 50,000₽/мес</li>
+              <li>Затраты на обучение: 30,000₽/мес</li>
+              <li>Снижение качества работы</li>
+              <li>Повышенная нагрузка на опытных сотрудников</li>
+            </ul>
+          </div>
+
+          <div class="insight-detail mb-4">
+            <h6 class="mb-3">Найденные возможности</h6>
+            <div class="solution-card">
+              <div class="solution-header">
+                <div class="author-info">
+                  <div class="author-avatar">АМ</div>
+                  <div>
+                    <div class="fw-500">Алексей Морозов</div>
+                    <small class="text-muted">HR-директор • 2 часа назад</small>
+                  </div>
+                </div>
+                <button class="btn btn-outline btn-sm">
+                  <i class="bi bi-hand-thumbs-up"></i>
+                  12
+                </button>
+              </div>
+              <p class="mb-0">Создать систему быстрого онбординга через мобильное приложение + геймификация обучения...</p>
+            </div>
+
+            <div class="solution-card">
+              <div class="solution-header">
+                <div class="author-info">
+                  <div class="author-avatar">ЕК</div>
+                  <div>
+                    <div class="fw-500">Екатерина Котова</div>
+                    <small class="text-muted">Операционный директор • 3 часа назад</small>
+                  </div>
+                </div>
+                <button class="btn btn-outline btn-sm">
+                  <i class="bi bi-hand-thumbs-up"></i>
+                  8
+                </button>
+              </div>
+              <p class="mb-0">Внедрить систему наставничества с бонусами за успешную адаптацию новичков...</p>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <h6 class="mb-3">Предложить решение</h6>
+            <textarea class="form-control mb-3" rows="3" placeholder="Опишите ваше решение..."></textarea>
+            <button class="btn btn-primary w-100">Отправить решение</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно профиля -->
+  <div class="modal fade" id="profileModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header border-0 pb-0">
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body pt-0">
+          <!-- Шапка профиля -->
+          <div class="text-center mb-4">
+            <div class="position-relative d-inline-block">
+              <div class="profile-avatar mb-2">АМ</div>
+              <span class="level-badge">12</span>
+            </div>
+            <h5 class="mb-1">Алексей Морозов</h5>
+            <p class="text-muted mb-2">Инноватор • HR-директор</p>
+            <div class="d-flex justify-content-center gap-2 mb-3">
+              <span class="stat-badge">
+                <i class="bi bi-lightbulb-fill"></i>
+                42 инсайта
+              </span>
+              <span class="stat-badge">
+                <i class="bi bi-trophy-fill"></i>
+                15 наград
+              </span>
+            </div>
+            <div class="level-progress mb-4">
+              <div class="progress mb-2">
+                <div class="progress-bar" style="width: 75%"></div>
+              </div>
+              <small class="text-muted">750/1000 XP до 13 уровня</small>
+            </div>
+          </div>
+
+          <!-- Награды -->
+          <div class="section-block mb-4">
+            <h6 class="section-title">Награды</h6>
+            <div class="achievements-grid">
+              <div class="achievement-item achieved">
+                <div class="achievement-icon">
+                  <i class="bi bi-stars"></i>
+                </div>
+                <span>Первый инсайт</span>
+              </div>
+              <div class="achievement-item achieved">
+                <div class="achievement-icon">
+                  <i class="bi bi-lightning-charge"></i>
+                </div>
+                <span>Быстрый старт</span>
+              </div>
+              <div class="achievement-item achieved">
+                <div class="achievement-icon">
+                  <i class="bi bi-trophy"></i>
+                </div>
+                <span>Топ-решение</span>
+              </div>
+              <div class="achievement-item">
+                <div class="achievement-icon locked">
+                  <i class="bi bi-people"></i>
+                </div>
+                <span>Командный игрок</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Статистика -->
+          <div class="section-block mb-4">
+            <h6 class="section-title">Статистика</h6>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-value">42</div>
+                <div class="stat-label">Инсайтов</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">156</div>
+                <div class="stat-label">Лайков</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">23</div>
+                <div class="stat-label">Кейса</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Десятка</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Десятка -->
+          <div class="section-block">
+            <h6 class="section-title">Десятка</h6>
+            <div class="friends-list">
+              <div class="friend-item" onclick="showFriendProfile('ЕК')">
+                <div class="friend-avatar">ЕК</div>
+                <div class="friend-info">
+                  <div class="friend-name">Екатерина Котова</div>
+                  <div class="friend-status">
+                    <span class="level-indicator">Уровень 15</span>
+                    <span class="friend-achievements">
+                      <i class="bi bi-trophy-fill"></i>
+                      18
+                    </span>
+                  </div>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+              </div>
+              <div class="friend-item" onclick="showFriendProfile('ИС')">
+                <div class="friend-avatar">ИС</div>
+                <div class="friend-info">
+                  <div class="friend-name">Игорь Смирнов</div>
+                  <div class="friend-status">
+                    <span class="level-indicator">Уровень 9</span>
+                    <span class="friend-achievements">
+                      <i class="bi bi-trophy-fill"></i>
+                      12
+                    </span>
+                  </div>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Инициализация Telegram Mini App
+    let tg = window.Telegram.WebApp;
+    tg.expand();
+
+    // Сплэш-экран
+    window.addEventListener("load", function () {
+      setTimeout(function () {
+        const splashScreen = document.getElementById("splashScreen");
+        splashScreen.style.opacity = "0";
+        setTimeout(() => {
+          splashScreen.style.display = "none";
+        }, 500);
+      }, 4500);
+    });
+
+    // Показ профиля
+    function showProfile() {
+      const profileModal = new bootstrap.Modal(document.getElementById("profileModal"));
+      profileModal.show();
+    }
+    function showFriendProfile(name) {
+      showProfile();
+    }
+
+    // Анимация появления карточек
+    window.addEventListener("load", () => {
+      const cards = document.querySelectorAll(".insight-feed .insight-card");
+      cards.forEach((card, i) => {
+        setTimeout(() => {
+          card.classList.add("show");
+        }, i * 100);
+      });
+    });
+
+    // Фильтрация кейсов по чипам
+    document.querySelectorAll(".chip").forEach((chip) => {
+      chip.addEventListener("click", function () {
+        document.querySelectorAll(".chip").forEach((c) => {
+          c.classList.remove("active");
+        });
+        this.classList.add("active");
+        filterInsights(this.textContent.trim());
+      });
+    });
+    function filterInsights(filter) {
+      const cards = document.querySelectorAll(".insight-card");
+      cards.forEach((card) => {
+        const categoryEl = card.querySelector(".category-badge");
+        if (!categoryEl) return;
+        const categoryText = categoryEl.textContent.toLowerCase();
+        const showAll = filter.toLowerCase() === "все кейсы";
+        const match = categoryText.includes(filter.toLowerCase()) || showAll;
+
+        if (match) {
+          card.style.display = "block";
+          setTimeout(() => card.classList.add("show"), 50);
+        } else {
+          card.classList.remove("show");
+          setTimeout(() => (card.style.display = "none"), 300);
+        }
+      });
+    }
+
+    // Обработка кнопок нижней навигации
+    document.querySelectorAll(".bottom-nav .nav-link").forEach((navLink) => {
+      navLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        document.querySelectorAll(".bottom-nav .nav-link").forEach((link) => link.classList.remove("active"));
+        this.classList.add("active");
+
+        const section = this.getAttribute("data-nav");
+        if (section === "insights") {
+          // ...
+        } else if (section === "search") {
+          // ...
+        } else if (section === "saved") {
+          // ...
+        } else if (section === "profile") {
+          showProfile();
+        }
+      });
+    });
+
+    // Публикация нового кейса
+    document.querySelector("#newCaseModal .btn-primary").addEventListener("click", function () {
+      const form = document.querySelector("#newCaseModal form");
+      const category = form.querySelector("select").value;
+      const title = form.querySelector('input[type="text"]').value;
+      const metrics = form.querySelector("textarea").value;
+
+      if (!title.trim() || !metrics.trim()) {
+        tg.showPopup({
+          title: "Заполните все поля",
+          message: "Для публикации кейса необходимо заполнить все поля",
+          buttons: [{ id: "ok", type: "default", text: "Понятно" }],
+        });
+        return;
+      }
+      new bootstrap.Modal(document.getElementById("newCaseModal")).hide();
+      form.reset();
+    });
+  </script>
+</body>
+</html>
