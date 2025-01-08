@@ -393,6 +393,7 @@
       border: 1px solid var(--border-color);
       border-radius: 12px;
       overflow: hidden;
+      transition: all 0.3s ease;
     }
 
     .stage-header {
@@ -407,6 +408,39 @@
     .stage-content {
       padding: 16px;
       background-color: var(--card-bg);
+      transition: all 0.3s ease;
+      max-height: 1000px;
+      opacity: 1;
+    }
+
+    .stage-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+
+    .stage.completed .stage-header {
+      background-color: rgba(16, 163, 127, 0.1);
+    }
+
+    .progress-mini .progress-line {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-mini .progress-line::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0;
+      background-color: var(--primary);
+      transition: width 0.5s ease;
+    }
+
+    .progress-mini .progress-line.active::after {
+      width: 100%;
     }
 
     .conflict-pair {
@@ -734,6 +768,48 @@
     .fw-500 {
       font-weight: 500;
     }
+
+    /* Стили */
+    .participants-progress {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .participants-progress .progress {
+      background-color: var(--bg-color);
+      border-radius: 3px;
+    }
+
+    .participants-progress .progress-bar {
+      transition: width 0.3s ease;
+    }
+
+    .participants-progress .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      background-color: var(--bg-color) !important;
+      color: var(--text-secondary) !important;
+    }
+
+    .participants-progress i {
+      margin-right: 6px;
+      font-size: 12px;
+    }
+
+    .participants-progress .text-success {
+      color: var(--success) !important;
+    }
+
+    /* Удаляем стили уведомлений */
+    .notification-container,
+    .notification,
+    .notification.show,
+    .notification-icon,
+    .notification-content,
+    .notification-title,
+    .notification-message {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -771,53 +847,11 @@
     </div>
   </div>
 
-  <!-- Основной контент -->
+  <!-- Контейнер для карточек -->
   <div class="container main-content">
     <div class="insight-feed">
-      <!-- Операционные кейсы -->
-      <div class="insight-card card mb-4">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div>
-              <span class="category-badge category-operational mb-2">Операционный</span>
-              <h5 class="card-title mb-1">Потери при передаче смен</h5>
-            </div>
-            <span class="status-badge status-facts">
-              <i class="bi bi-clipboard-data"></i>
-              Сбор фактов
-            </span>
-          </div>
-
-          <div class="insight-detail mb-3">
-            <div class="mb-2">
-              <small class="text-muted d-block mb-1">X-элемент</small>
-              <p class="mb-0">30% задач теряется при передаче между сменами</p>
-            </div>
-            <div>
-              <small class="text-muted d-block mb-1">Текущий этап</small>
-              <p class="mb-0">Сбор фактов о проблеме и её влиянии на процессы</p>
-            </div>
-          </div>
-
-          <div class="participation-stats">
-            <div class="stat-item active">
-              <i class="bi bi-people-fill"></i>
-              12 участников
-            </div>
-            <div class="stat-item">
-              <i class="bi bi-chat-dots"></i>
-              8 предложений
-            </div>
-            <div class="stat-item">
-              <i class="bi bi-hourglass-split"></i>
-              60%
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Мой новый кейс -->
-      <div class="insight-card card mb-4" data-my-case="true">
+      <!-- Шаблон карточки кейса -->
+      <div class="insight-card" data-case-id="new_case">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-start mb-3">
             <div>
@@ -871,33 +905,38 @@
             <div class="stages-progress">
               <!-- Этап 1: Конфликтующая пара -->
               <div class="stage active">
-                <div class="stage-header" data-bs-toggle="collapse" data-bs-target="#conflictStageNew">
+                <div class="stage-header">
                   <div>
                     <h6 class="mb-1">Конфликтующая пара</h6>
-                    <small class="text-muted">Нужно 3 участника для формирования</small>
+                    <small class="text-muted">
+                      <i class="bi bi-pencil"></i>
+                      Заполните конфликтующую пару
+                    </small>
                   </div>
-                  <button class="btn btn-sm btn-primary">
-                    <i class="bi bi-plus-lg"></i>
-                    Участвовать
-                  </button>
                 </div>
-                <div id="conflictStageNew" class="stage-content collapse show">
+                <div class="stage-content show">
                   <div class="mb-3">
                     <div class="alert alert-info">
                       <i class="bi bi-info-circle me-2"></i>
-                      Сформулируйте противоречие, которое приводит к потере задач
+                      Опишите противоречие в проблеме
                     </div>
                   </div>
                   <div class="conflict-pair">
                     <div class="conflict-element">
                       <span class="element-label">Что должно быть?</span>
-                      <input type="text" class="form-control form-control-sm" placeholder="Например: Быстрая передача" />
+                      <input type="text" class="form-control form-control-sm" placeholder="Итог мозгового штурма">
                     </div>
                     <div class="conflict-vs">VS</div>
                     <div class="conflict-element">
                       <span class="element-label">Чему это мешает?</span>
-                      <input type="text" class="form-control form-control-sm" placeholder="Например: Точность информации" />
+                      <input type="text" class="form-control form-control-sm" placeholder="Итог мозгового штурма">
                     </div>
+                  </div>
+                  <div class="mt-3 d-flex justify-content-end">
+                    <button class="btn btn-sm btn-primary" onclick="saveConflictPair('new_case')">
+                      <i class="bi bi-check-lg"></i>
+                      Сохранить результаты
+                    </button>
                   </div>
                 </div>
               </div>
@@ -907,26 +946,11 @@
                 <div class="stage-header">
                   <div>
                     <h6 class="mb-1">Идеальный конечный результат</h6>
-                    <small class="text-muted">Откроется после формирования конфликта</small>
+                    <small class="text-muted">
+                      <i class="bi bi-lock"></i>
+                      Этап заблокирован
+                    </small>
                   </div>
-                  <button class="btn btn-sm btn-outline-secondary" disabled>
-                    <i class="bi bi-lock"></i>
-                    Заблокировано
-                  </button>
-                </div>
-              </div>
-
-              <!-- Этап 3: Инсайты -->
-              <div class="stage">
-                <div class="stage-header">
-                  <div>
-                    <h6 class="mb-1">Инсайты</h6>
-                    <small class="text-muted">Откроется после определения ИКР</small>
-                  </div>
-                  <button class="btn btn-sm btn-outline-secondary" disabled>
-                    <i class="bi bi-lock"></i>
-                    Заблокировано
-                  </button>
                 </div>
               </div>
             </div>
@@ -1230,15 +1254,280 @@
     let tg = window.Telegram.WebApp;
     tg.expand();
 
+    // Конфигурация
+    const CONFIG = {
+      stages: {
+        conflict: { min: 3, max: 5 },
+        ikr: { min: 5, max: 8 },
+        insights: { min: 3, max: 10 }
+      }
+    };
+
+    // Хранилище данных
+    const store = {
+      cases: [],
+      currentUser: null
+    };
+
+    // Генератор ID
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    // Парсинг метрик
+    function parseMetrics(metricsText) {
+      const metrics = [];
+      const parts = metricsText.split(',').map(p => p.trim());
+      
+      parts.forEach(part => {
+        if (part.includes('%')) {
+          metrics.push({
+            key: 'percentage',
+            value: part,
+            icon: 'bi-exclamation-triangle'
+          });
+        } else if (part.match(/\d+/)) {
+          metrics.push({
+            key: 'number',
+            value: part,
+            icon: 'bi-hash'
+          });
+        }
+      });
+
+      return metrics;
+    }
+
+    // Создание нового кейса
+    function createCase(formData) {
+      const newCase = {
+        id: generateId(),
+        type: formData.category,
+        title: formData.description,
+        xElement: {
+          problem: formData.metrics,
+          metrics: parseMetrics(formData.metrics)
+        },
+        stages: {
+          current: 'conflict',
+          conflict: null,
+          ikr: null,
+          insights: []
+        },
+        participants: {
+          author: getCurrentUser(),
+          members: [],
+          required: CONFIG.stages.conflict.min
+        },
+        status: {
+          createdAt: new Date(),
+          deadline: new Date(Date.now() + 24 * 60 * 60 * 1000), // +24 часа
+          progress: 0
+        }
+      };
+
+      store.cases.push(newCase);
+      renderCase(newCase);
+      return newCase;
+    }
+
+    // Получение текущего пользователя
+    function getCurrentUser() {
+      if (!store.currentUser) {
+        store.currentUser = {
+          id: generateId(),
+          name: 'Текущий пользователь',
+          avatar: 'ТП'
+        };
+      }
+      return store.currentUser;
+    }
+
+    // Рендер карточки кейса
+    function renderCase(caseData) {
+      const template = `
+        <div class="insight-card" data-case-id="${caseData.id}">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                <span class="category-badge category-operational mb-2">Мой кейс</span>
+                <h5 class="card-title mb-1">${caseData.title}</h5>
+                <div class="insight-stats">
+                  <span class="insight-stat">
+                    <i class="bi bi-people-fill"></i>
+                    ${caseData.participants.members.length + 1} участник
+                  </span>
+                  <span class="insight-stat">
+                    <i class="bi bi-clock"></i>
+                    Только что
+                  </span>
+                </div>
+              </div>
+              <div class="d-flex flex-column align-items-end">
+                <span class="status-badge mb-2">Новый</span>
+                <div class="progress-mini">
+                  <div class="progress-step active">
+                    <i class="bi bi-1-circle-fill"></i>
+                  </div>
+                  <div class="progress-line"></div>
+                  <div class="progress-step">
+                    <i class="bi bi-2-circle"></i>
+                  </div>
+                  <div class="progress-line"></div>
+                  <div class="progress-step">
+                    <i class="bi bi-3-circle"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="insight-detail mb-3">
+              <div class="mb-3">
+                <small class="text-muted d-block mb-1">X-элемент</small>
+                <p class="mb-2">${caseData.xElement.problem}</p>
+                <div class="d-flex gap-2">
+                  ${caseData.xElement.metrics.map(metric => `
+                    <span class="metric-badge">
+                      <i class="bi ${metric.icon}"></i>
+                      ${metric.value}
+                    </span>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div class="stages-progress">
+                <div class="stage active">
+                  <div class="stage-header" data-bs-toggle="collapse" data-bs-target="#conflictStage_${caseData.id}">
+                    <div>
+                      <h6 class="mb-1">Конфликтующая пара</h6>
+                      <small class="text-muted">Участников: ${caseData.participants.members.length}/${CONFIG.stages.conflict.min}</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="showParticipants('${caseData.id}')">
+                      <i class="bi bi-people"></i>
+                      Участники
+                    </button>
+                  </div>
+                  <div id="conflictStage_${caseData.id}" class="stage-content collapse show">
+                    <div class="mb-3">
+                      <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Результаты мозгового штурма
+                      </div>
+                    </div>
+                    <div class="conflict-pair">
+                      <div class="conflict-element">
+                        <span class="element-label">Что должно быть?</span>
+                        <input type="text" class="form-control form-control-sm" placeholder="Итог мозгового штурма">
+                      </div>
+                      <div class="conflict-vs">VS</div>
+                      <div class="conflict-element">
+                        <span class="element-label">Чему это мешает?</span>
+                        <input type="text" class="form-control form-control-sm" placeholder="Итог мозгового штурма">
+                      </div>
+                    </div>
+                    <div class="mt-3 d-flex justify-content-end">
+                      <button class="btn btn-sm btn-primary" onclick="saveConflictPair('${caseData.id}')">
+                        <i class="bi bi-check-lg"></i>
+                        Сохранить результаты
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-actions d-flex justify-content-between align-items-center">
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline">
+                  <i class="bi bi-bookmark"></i>
+                </button>
+                <button class="btn btn-sm btn-outline">
+                  <i class="bi bi-share"></i>
+                </button>
+              </div>
+              <div class="d-flex gap-2">
+                <span class="metric-badge">
+                  <i class="bi bi-clock"></i>
+                  23:59:59
+                </span>
+                <button class="btn btn-sm btn-primary">Обсудить</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      const feedContainer = document.querySelector('.insight-feed');
+      if (feedContainer) {
+        feedContainer.insertAdjacentHTML('afterbegin', template);
+        
+        // Анимация появления
+        setTimeout(() => {
+          const newCard = feedContainer.firstElementChild;
+          if (newCard) newCard.classList.add('show');
+        }, 100);
+      }
+    }
+
+    // Функция запроса на участие
+    function requestParticipation(caseId) {
+      const caseData = store.cases.find(c => c.id === caseId);
+      if (caseData) {
+        tg.sendData(JSON.stringify({
+          action: 'REQUEST_PARTICIPATION',
+          caseId: caseId,
+          userId: getCurrentUser().id
+        }));
+      }
+    }
+
+    // Функция показа участников
+    function showParticipants(caseId) {
+      const caseData = store.cases.find(c => c.id === caseId);
+      if (caseData) {
+        tg.sendData(JSON.stringify({
+          action: 'SHOW_PARTICIPANTS',
+          caseId: caseId
+        }));
+      }
+    }
+
+    // Обработчик создания нового кейса
+    document.querySelector('#newCaseModal .btn-primary').addEventListener('click', function() {
+      const modal = document.querySelector('#newCaseModal');
+      const formData = {
+        category: modal.querySelector('select').value,
+        description: modal.querySelector('input[type="text"]').value,
+        metrics: modal.querySelector('textarea:first-of-type').value,
+        desiredResult: modal.querySelector('textarea:last-of-type').value
+      };
+
+      // Валидация
+      if (!formData.description || !formData.metrics) {
+        tg.showAlert('Заполните все обязательные поля');
+        return;
+      }
+
+      // Создание кейса
+      createCase(formData);
+      
+      // Закрытие модального окна
+      bootstrap.Modal.getInstance(document.getElementById('newCaseModal')).hide();
+      modal.querySelector('form').reset();
+    });
+
     // Сплэш-экран
     window.addEventListener("load", function () {
+      const splashScreen = document.getElementById("splashScreen");
+      if (!splashScreen) return;
+      
+      // Уменьшаем время показа сплэш-экрана до 2 секунд
       setTimeout(function () {
-        const splashScreen = document.getElementById("splashScreen");
         splashScreen.style.opacity = "0";
         setTimeout(() => {
           splashScreen.style.display = "none";
         }, 500);
-      }, 4500);
+      }, 2000); // Было 4500, теперь 2000
     });
 
     // Показ профиля
@@ -1260,21 +1549,21 @@
       });
     });
 
-    // Фильтрация кейсов по чипам
+    // Фильтрация кейсов
     document.querySelectorAll(".chip").forEach((chip) => {
       chip.addEventListener("click", function () {
-        document.querySelectorAll(".chip").forEach((c) => {
-          c.classList.remove("active");
-        });
+        document.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
         this.classList.add("active");
-        filterInsights(this.textContent.trim());
+        filterCases(this.textContent.trim());
       });
     });
-    function filterInsights(filter) {
+
+    function filterCases(filter) {
       const cards = document.querySelectorAll(".insight-card");
       cards.forEach((card) => {
         const categoryEl = card.querySelector(".category-badge");
         if (!categoryEl) return;
+        
         const categoryText = categoryEl.textContent.toLowerCase();
         const showAll = filter.toLowerCase() === "все кейсы";
         const match = categoryText.includes(filter.toLowerCase()) || showAll;
@@ -1289,43 +1578,358 @@
       });
     }
 
-    // Обработка кнопок нижней навигации
-    document.querySelectorAll(".bottom-nav .nav-link").forEach((navLink) => {
-      navLink.addEventListener("click", function (e) {
-        e.preventDefault();
-        document.querySelectorAll(".bottom-nav .nav-link").forEach((link) => link.classList.remove("active"));
-        this.classList.add("active");
-
-        const section = this.getAttribute("data-nav");
-        if (section === "insights") {
-          // ...
-        } else if (section === "search") {
-          // ...
-        } else if (section === "saved") {
-          // ...
-        } else if (section === "profile") {
-          showProfile();
+    // Обработка участия в кейсе
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('.btn-primary') && e.target.closest('.stage-header')) {
+        const caseId = e.target.closest('.insight-card').dataset.caseId;
+        const caseData = store.cases.find(c => c.id === caseId);
+        
+        if (caseData) {
+          caseData.participants.members.push(getCurrentUser());
+          renderCase(caseData); // Перерендерить карточку
         }
-      });
+      }
     });
 
-    // Публикация нового кейса
-    document.querySelector("#newCaseModal .btn-primary").addEventListener("click", function () {
-      const form = document.querySelector("#newCaseModal form");
-      const category = form.querySelector("select").value;
-      const title = form.querySelector('input[type="text"]').value;
-      const metrics = form.querySelector("textarea").value;
+    // Обработка ввода в конфликтующей паре
+    document.addEventListener('input', function(e) {
+      const conflictPair = e.target.closest('.conflict-pair');
+      if (!conflictPair) return;
 
-      if (!title.trim() || !metrics.trim()) {
-        tg.showPopup({
-          title: "Заполните все поля",
-          message: "Для публикации кейса необходимо заполнить все поля",
-          buttons: [{ id: "ok", type: "default", text: "Понятно" }],
-        });
+      const inputs = conflictPair.querySelectorAll('input');
+      if (inputs.length < 2) return;
+
+      const positive = inputs[0].value;
+      const negative = inputs[1].value;
+
+      const card = e.target.closest('.insight-card');
+      if (!card) return;
+
+      const caseId = card.dataset.caseId;
+      const caseData = store.cases.find(c => c.id === caseId);
+      
+      if (caseData && positive && negative) {
+        caseData.stages.conflict = {
+          positive,
+          negative,
+          isComplete: true
+        };
+      }
+    });
+
+    // Добавляем функцию сохранения конфликтующей пары
+    function saveConflictPair(caseId) {
+      const card = document.querySelector(`.insight-card[data-case-id="${caseId}"]`);
+      if (!card) return;
+
+      const conflictPair = card.querySelector('.conflict-pair');
+      if (!conflictPair) return;
+
+      const inputs = conflictPair.querySelectorAll('input');
+      if (inputs.length < 2) return;
+
+      const positive = inputs[0].value.trim();
+      const negative = inputs[1].value.trim();
+
+      if (!positive || !negative) {
+        alert('Заполните оба поля конфликтующей пары');
         return;
       }
-      new bootstrap.Modal(document.getElementById("newCaseModal")).hide();
-      form.reset();
+
+      try {
+        // 1. Сохраняем данные
+        tg.sendData(JSON.stringify({
+          action: 'SAVE_CONFLICT_PAIR',
+          caseId: caseId,
+          data: { positive, negative }
+        }));
+
+        // 2. Обновляем UI первого этапа
+        const conflictStage = card.querySelector('.stage:first-child');
+        if (conflictStage) {
+          // Обновляем заголовок
+          const header = conflictStage.querySelector('.stage-header');
+          header.innerHTML = `
+            <div>
+              <h6 class="mb-1">Конфликтующая пара</h6>
+              <small class="text-success">
+                <i class="bi bi-check-circle"></i>
+                Этап завершен
+              </small>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary" onclick="toggleStage('${caseId}')">
+              <i class="bi bi-chevron-down"></i>
+              Результаты
+            </button>
+          `;
+
+          // Сохраняем результаты и сворачиваем контент
+          const content = conflictStage.querySelector('.stage-content');
+          content.innerHTML = `
+            <div class="alert alert-success mb-0">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <strong>Сохраненные результаты:</strong>
+                  <div class="mt-2">
+                    <div class="mb-2">
+                      <small class="text-muted">Что должно быть?</small>
+                      <div>${positive}</div>
+                    </div>
+                    <div class="text-muted my-1">VS</div>
+                    <div>
+                      <small class="text-muted">Чему это мешает?</small>
+                      <div>${negative}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          // Анимируем сворачивание
+          setTimeout(() => {
+            content.style.maxHeight = '0';
+            content.style.opacity = '0';
+            content.style.overflow = 'hidden';
+          }, 100);
+        }
+
+        // 3. Активируем второй этап
+        const ikrStage = card.querySelector('.stage:nth-child(2)');
+        if (ikrStage) {
+          ikrStage.classList.add('active');
+          ikrStage.innerHTML = `
+            <div class="stage-header">
+              <div>
+                <h6 class="mb-1">Идеальный конечный результат</h6>
+                <small class="text-primary">
+                  <i class="bi bi-people"></i>
+                  Необходимо собрать команду
+                </small>
+              </div>
+            </div>
+            <div class="stage-content show">
+              <div class="alert alert-info mb-3">
+                <i class="bi bi-info-circle me-2"></i>
+                Для начала работы над ИКР необходимо собрать команду из ${CONFIG.stages.ikr.min} участников
+              </div>
+              <div class="participants-progress mb-3">
+                <div class="progress" style="height: 4px;">
+                  <div class="progress-bar bg-primary" role="progressbar" style="width: 0%"></div>
+                </div>
+                <small class="text-muted d-flex justify-content-between align-items-center mt-2">
+                  <span>
+                    <i class="bi bi-people"></i>
+                    Нужно ещё ${CONFIG.stages.ikr.min} участников
+                  </span>
+                  <span class="badge bg-light text-dark">0/${CONFIG.stages.ikr.min}</span>
+                </small>
+              </div>
+              <div class="d-flex gap-2 justify-content-center">
+                <button class="btn btn-primary" onclick="inviteParticipants('${caseId}')">
+                  <i class="bi bi-person-plus me-2"></i>
+                  Пригласить участников
+                </button>
+                <button class="btn btn-outline-primary" onclick="showParticipants('${caseId}')">
+                  <i class="bi bi-people me-2"></i>
+                  Список участников
+                </button>
+              </div>
+            </div>
+          `;
+        }
+
+      } catch (error) {
+        console.error('Ошибка при сохранении:', error);
+        alert('Произошла ошибка при сохранении. Попробуйте еще раз.');
+      }
+    }
+
+    // Функция для переключения видимости этапа
+    function toggleStage(caseId) {
+      const card = document.querySelector(`.insight-card[data-case-id="${caseId}"]`);
+      const content = card.querySelector('.stage:first-child .stage-content');
+      const button = card.querySelector('.stage:first-child .btn-outline-secondary i');
+      
+      if (content.style.maxHeight === '0px') {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        content.style.opacity = '1';
+        button.classList.remove('bi-chevron-down');
+        button.classList.add('bi-chevron-up');
+      } else {
+        content.style.maxHeight = '0';
+        content.style.opacity = '0';
+        button.classList.remove('bi-chevron-up');
+        button.classList.add('bi-chevron-down');
+      }
+    }
+
+    // Функция начала сбора команды
+    function startTeamCollection(caseId) {
+      const card = document.querySelector(`.insight-card[data-case-id="${caseId}"]`);
+      const ikrStage = card.querySelector('.stage:nth-child(2)');
+      
+      // Обновляем контент этапа ИКР
+      ikrStage.querySelector('.stage-content').innerHTML = `
+        <div class="participants-collection mb-3">
+          <div class="progress" style="height: 4px;">
+            <div class="progress-bar bg-primary" role="progressbar" style="width: 0%"></div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <small class="text-muted">
+              <i class="bi bi-people"></i>
+              Участников: 0/${CONFIG.stages.ikr.min}
+            </small>
+            <button class="btn btn-sm btn-primary" onclick="inviteParticipants('${caseId}')">
+              <i class="bi bi-person-plus"></i>
+              Пригласить
+            </button>
+          </div>
+        </div>
+      `;
+
+      // Обновляем заголовок
+      ikrStage.querySelector('.stage-header small').innerHTML = `
+        <i class="bi bi-people"></i>
+        Сбор участников
+      `;
+    }
+
+    // Функция для приглашения участников
+    function inviteParticipants(caseId) {
+      tg.sendData(JSON.stringify({
+        action: 'INVITE_PARTICIPANTS',
+        caseId: caseId,
+        stage: 'ikr',
+        requiredCount: CONFIG.stages.ikr.min
+      }));
+    }
+
+    // Функция для редактирования результатов
+    function editResults(caseId) {
+      const card = document.querySelector(`.insight-card[data-case-id="${caseId}"]`);
+      const caseData = store.cases.find(c => c.id === caseId);
+      
+      if (confirm('Вы уверены, что хотите отредактировать результаты?')) {
+        const content = card.querySelector('.stage:first-child .stage-content');
+        content.innerHTML = `
+          <div class="conflict-pair">
+            <div class="conflict-element">
+              <span class="element-label">Что должно быть?</span>
+              <input type="text" class="form-control form-control-sm" value="${caseData.stages.conflict.positive}">
+            </div>
+            <div class="conflict-vs">VS</div>
+            <div class="conflict-element">
+              <span class="element-label">Чему это мешает?</span>
+              <input type="text" class="form-control form-control-sm" value="${caseData.stages.conflict.negative}">
+            </div>
+          </div>
+          <div class="mt-3 d-flex justify-content-end">
+            <button class="btn btn-sm btn-primary" onclick="saveConflictPair('${caseId}')">
+              <i class="bi bi-check-lg"></i>
+              Сохранить изменения
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    // Обновляем функцию обработки новых участников
+    function onParticipantJoined(caseId, participant) {
+      const caseData = store.cases.find(c => c.id === caseId);
+      if (!caseData) return;
+
+      // Добавляем участника
+      caseData.participants.members.push(participant);
+      
+      // Обновляем UI
+      const card = document.querySelector(`.insight-card[data-case-id="${caseId}"]`);
+      if (!card) return;
+
+      const membersCount = caseData.participants.members.length;
+      const requiredCount = CONFIG.stages.ikr.min;
+      const percentage = Math.min((membersCount / requiredCount) * 100, 100);
+
+      // Обновляем прогресс-бар
+      const progressBar = card.querySelector('.progress-bar');
+      if (progressBar) {
+        progressBar.style.width = `${percentage}%`;
+      }
+
+      // Обновляем текст
+      const participantsText = card.querySelector('.participants-progress small span:first-child');
+      const participantsCounter = card.querySelector('.participants-progress .badge');
+      
+      if (participantsText && participantsCounter) {
+        if (membersCount >= requiredCount) {
+          participantsText.innerHTML = `
+            <i class="bi bi-check-circle-fill text-success"></i>
+            Команда собрана
+          `;
+          // Активируем кнопку старта ИКР
+          const startButton = document.createElement('button');
+          startButton.className = 'btn btn-success w-100 mt-3';
+          startButton.innerHTML = `
+            <i class="bi bi-play-fill me-2"></i>
+            Начать работу над ИКР
+          `;
+          startButton.onclick = () => startIKR(caseId);
+          card.querySelector('.stage-content').appendChild(startButton);
+        } else {
+          participantsText.innerHTML = `
+            <i class="bi bi-people"></i>
+            Нужно ещё ${requiredCount - membersCount} участников
+          `;
+        }
+        participantsCounter.textContent = `${membersCount}/${requiredCount}`;
+      }
+    }
+
+    // Функция для начала работы над ИКР
+    function startIKR(caseId) {
+      const caseData = store.cases.find(c => c.id === caseId);
+      if (!caseData) return;
+
+      const card = document.querySelector(`.insight-card[data-case-id="${caseId}"]`);
+      if (!card) return;
+
+      const ikrStage = card.querySelector('.stage:nth-child(2)');
+      if (!ikrStage) return;
+
+      // Показываем форму ИКР
+      ikrStage.querySelector('.stage-content').innerHTML = `
+        <div class="alert alert-info mb-3">
+          <i class="bi bi-info-circle me-2"></i>
+          Сформулируйте идеальный конечный результат
+        </div>
+        <div class="ikr-form">
+          <div class="mb-3">
+            <label class="form-label">Система сама...</label>
+            <input type="text" class="form-control" placeholder="Например: передает все задачи без потерь">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">При этом...</label>
+            <input type="text" class="form-control" placeholder="Например: не требует дополнительных ресурсов">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">А если...</label>
+            <input type="text" class="form-control" placeholder="Например: возникают ошибки, система сама их исправляет">
+          </div>
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-primary" onclick="saveIKR('${caseId}')">
+              <i class="bi bi-check-lg me-2"></i>
+              Сохранить ИКР
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Обработчик ответа на попап
+    tg.onEvent('popupClosed', (event) => {
+      if (event.button_id === 'invite') {
+        inviteParticipants(event.caseId);
+      }
     });
   </script>
 </body>
